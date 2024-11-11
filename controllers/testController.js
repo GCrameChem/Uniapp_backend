@@ -2,6 +2,7 @@
 
 // 处理简单的 GET 请求
 const getTestMessage = (req, res) => {
+  console.log('Received login request:', req.body);
   res.json({
     message: 'Success! This is a test response.',
     code: 200,
