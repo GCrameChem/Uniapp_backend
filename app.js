@@ -26,6 +26,7 @@ import testRoutes from './routes/test.js';
 import userLoginRoutes from './routes/userLogin.js';
 import userCenterRoutes from './routes/userCenter.js';
 import weatherRoutes from './routes/weather.js';
+import accountRoutes from './routes/account.js'; 
 
 // 本项目中其他路由在这里引入
 
@@ -76,6 +77,7 @@ app.use('/test', testRoutes);
 app.use('/userLogin', userLoginRoutes);
 app.use('/userCenter', userCenterRoutes);
 app.use('/weather', weatherRoutes);
+app.use('/account',accountRoutes);
 // 本项目中的路由在这里进行相关路径挂载
 
 
