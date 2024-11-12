@@ -10,8 +10,6 @@ function generateUniqueId() {
 const getRecords = async (req, res) => {
     try {
       const { userId, date } = req.body;
-  
-      console.log(date);
 
       // 验证参数
       if (!userId || !date) {
