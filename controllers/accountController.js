@@ -22,7 +22,7 @@ const getRecords = async (req, res) => {
 
       // 查询 accountdata 表中的记录
       const records = await executeQuery(
-        `SELECT * FROM accountdata WHERE userId = ? AND time LIKE ?`,
+        `SELECT * FROM accountdata WHERE user_id = ? AND time LIKE ?`,
         [userId, `${formattedDate}%`] // 使用 LIKE 查询日期
       );
   
@@ -58,7 +58,7 @@ const deleteRecord = async (req, res) => {
     try {
         // 删除满足条件的记录
         const result = await executeQuery(
-            `DELETE FROM accountdata WHERE userId = ? AND id = ?`,
+            `DELETE FROM accountdata WHERE user_id = ? AND acc_id = ?`,
             [userId, recordId]
         );
 
@@ -88,7 +88,7 @@ const addRecord = async (req, res) => {
       if (id !== -1) {
           console.log(`删除记录：userId=${userId}, id=${id}`);
           await executeQuery(
-              `DELETE FROM accountdata WHERE userId = ? AND id = ?`,
+              `DELETE FROM accountdata WHERE user_id = ? AND acc_id = ?`,
               [userId, id]
           );
       }
@@ -98,7 +98,7 @@ const addRecord = async (req, res) => {
 
       // 插入新记录
       await executeQuery(
-          `INSERT INTO accountdata (id, userId, time, type, amount, note, expensetype, incometype) 
+          `INSERT INTO accountdata (acc_id, user_id, time, type, amount, note, expensetype, incometype) 
            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
           [newRecordId, userId, date, type, numericAmount, remark, expenseType, incomeType]
       );
