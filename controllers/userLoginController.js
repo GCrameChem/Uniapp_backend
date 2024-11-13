@@ -52,7 +52,7 @@ const register = async (req, res) => {
     // const sql = 'INSERT INTO userdata (username, password) VALUES (?, ?)';
     // const result = await executeQuery(sql, [username, password]);
 
-    const sql = 'INSERT INTO userdata (username, id, password, nickname, gender, age, school, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO userdata (username, user_id, password, nickname, gender, age, school, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     // 改进：为每个不同的用户自动分配id
     // 改进：哈希加密至少三次，并保证数据库中存储的是加密后的密码
 
@@ -79,12 +79,12 @@ const login = async (req, res) => {
     console.log('Received login request:', req.body);
     try {
         // 查询数据库，检查是否存在该用户名
-        const sql = 'SELECT password, id, nickname, gender, age, school, description FROM userdata WHERE username = ?';
+        const sql = 'SELECT password, user_id, nickname, gender, age, school, description FROM userdata WHERE username = ?';
         const result = await executeQuery(sql, [username]);
 
         if (result.length > 0) {
             const dbPassword = result[0].password;
-            const userId = result[0].id;  // 获取userId
+            const userId = result[0].user_id;  // 获取userId
             const nickname = result[0].nickname;
             const gender = result[0].gender;
             const age = result[0].age;
