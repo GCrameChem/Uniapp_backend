@@ -31,7 +31,10 @@ const getRecords = async (req, res) => {
         ? records.map(record => ({
             description: record.note,  
             amount: record.amount,      
-            type: record.type 
+            type: record.type,
+            date: record.time,
+            recordId: record.id, 
+            category: record.type === 'expense' ? record.expenseType : record.incomeType
         }))
         : [];
   
@@ -48,13 +51,15 @@ const getRecords = async (req, res) => {
 
 // 删除记录的接口
 const deleteRecord = async (req, res) => {
-    const { userId, date, recordId } = req.body;
+    const { userId, recordId } = req.body;
+
+    console.log(userId, recordId);
 
     try {
         // 删除满足条件的记录
         const result = await executeQuery(
-            `DELETE FROM accountdata WHERE userId = ? AND time = ? AND id = ?`,
-            [userId, date, recordId]
+            `DELETE FROM accountdata WHERE userId = ? AND id = ?`,
+            [userId, recordId]
         );
 
         // 检查是否有记录被删除
@@ -69,41 +74,41 @@ const deleteRecord = async (req, res) => {
     }
 };
 
-// 添加或更新记录的接口
 const addRecord = async (req, res) => {
-    const { userId, id, mydate, date, remark, amount, type, category } = req.body;
+  const { userId, id, mydate, date, remark, amount, type, category } = req.body;
 
-    // 确定是支出类型还是收入类型
-    const expenseType = type === 'expense' ? category : null;
-    const incomeType = type === 'income' ? category : null;
+  // 确定是支出类型还是收入类型
+  const expenseType = type === 'expense' ? category : null;
+  const incomeType = type === 'income' ? category : null;
 
-    let numericAmount = parseFloat(amount);
+  let numericAmount = parseFloat(amount);
 
-    try {
-        // 如果 id 不为 -1，表示是修改记录，则先删除旧的记录
-        if (id !== -1) {
-            await executeQuery(
-                `DELETE FROM accountdata WHERE userId = ? AND time = ? AND id = ?`,
-                [userId, mydate, id]
-            );
-        }
+  try {
+      // 如果 id 不为 -1，表示是修改记录，则先删除旧的记录
+      if (id !== -1) {
+          console.log(`删除记录：userId=${userId}, id=${id}`);
+          await executeQuery(
+              `DELETE FROM accountdata WHERE userId = ? AND id = ?`,
+              [userId, id]
+          );
+      }
 
-        // 生成新的记录 id
-        const newRecordId = generateUniqueId();
+      // 生成新的记录 id
+      const newRecordId = generateUniqueId();
 
-        // 插入新记录
-        await executeQuery(
-            `INSERT INTO accountdata (id, userId, time, type, amount, note, expensetype, incometype) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [newRecordId, userId, date, type, numericAmount, remark, expenseType, incomeType]
-        );
+      // 插入新记录
+      await executeQuery(
+          `INSERT INTO accountdata (id, userId, time, type, amount, note, expensetype, incometype) 
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [newRecordId, userId, date, type, numericAmount, remark, expenseType, incomeType]
+      );
 
-        // 返回成功信息
-        return res.status(200).json({ code: 200, message: '记录添加成功' });
-    } catch (error) {
-        console.error('添加记录时出错:', error);
-        return res.status(500).json({ code: 500, message: '服务器错误' });
-    }
+      // 返回成功信息
+      return res.status(200).json({ code: 200, message: '记录添加成功' });
+  } catch (error) {
+      console.error('添加记录时出错:', error);
+      return res.status(500).json({ code: 500, message: '服务器错误' });
+  }
 };
 
 export default {
