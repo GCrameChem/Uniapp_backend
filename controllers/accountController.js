@@ -18,7 +18,6 @@ const getRecords = async (req, res) => {
   
       // 转换日期格式
       const formattedDate = new Date(date).toISOString().split('T')[0];  // Adjust if needed for your database's date format
-      console.log(formattedDate);
 
       // 查询 accountdata 表中的记录
       const records = await executeQuery(
@@ -33,8 +32,9 @@ const getRecords = async (req, res) => {
             amount: record.amount,      
             type: record.type,
             date: record.time,
-            recordId: record.id, 
-            category: record.type === 'expense' ? record.expenseType : record.incomeType
+            recordId: record.acc_id, 
+            expenseType: record.expensetype,
+            incomeType : record.incometype
         }))
         : [];
   
@@ -52,8 +52,6 @@ const getRecords = async (req, res) => {
 // 删除记录的接口
 const deleteRecord = async (req, res) => {
     const { userId, recordId } = req.body;
-
-    console.log(userId, recordId);
 
     try {
         // 删除满足条件的记录
@@ -84,9 +82,8 @@ const addRecord = async (req, res) => {
   let numericAmount = parseFloat(amount);
 
   try {
-      // 如果 id 不为 -1，表示是修改记录，则先删除旧的记录
-      if (id !== -1) {
-          console.log(`删除记录：userId=${userId}, id=${id}`);
+      // 如果 id 不为 none，表示是修改记录，则先删除旧的记录
+      if (id !== "none") {
           await executeQuery(
               `DELETE FROM accountdata WHERE user_id = ? AND acc_id = ?`,
               [userId, id]
