@@ -29,6 +29,7 @@ import weatherRoutes from './routes/weather.js';
 import accountRoutes from './routes/account.js'; 
 import contactRoutes from './routes/contact.js';
 import rememberRoutes from './routes/remember.js';
+import dietRoutes from './routes/diet.js';
 // 本项目中其他路由在这里引入
 
 
@@ -82,6 +83,7 @@ app.use('/weather', weatherRoutes);
 app.use('/account',accountRoutes);
 app.use('/contact', contactRoutes);
 app.use('/remember',rememberRoutes);
+app.use('/diet', dietRoutes);
 // 本项目中的路由在这里进行相关路径挂载
 
 
