@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 // 此乃测试/模板路由声明
 import testRoutes from './routes/test.js';
 
-//import timetableRoutes from './routes/timetable.js';
+import timetableRoutes from './routes/timetable.js';
 import userLoginRoutes from './routes/userLogin.js';
 import userCenterRoutes from './routes/userCenter.js';
 import weatherRoutes from './routes/weather.js';
@@ -79,7 +79,7 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 // 此乃测试路由挂载说明，进行接口测试时请使用 http://localhost:3000/test/test 进行测试
 app.use('/test', testRoutes);
 
-//app.use('/timetable', timetableRoutes);
+app.use('/timetable', timetableRoutes);
 app.use('/userLogin', userLoginRoutes);
 app.use('/userCenter', userCenterRoutes);
 app.use('/weather', weatherRoutes);
