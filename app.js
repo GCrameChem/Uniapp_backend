@@ -29,7 +29,9 @@ import userLoginRoutes from './routes/userLogin.js';
 import userCenterRoutes from './routes/userCenter.js';
 import weatherRoutes from './routes/weather.js';
 import accountRoutes from './routes/account.js'; 
-
+import contactRoutes from './routes/contact.js';
+import rememberRoutes from './routes/remember.js';
+import dietRoutes from './routes/diet.js';
 // 本项目中其他路由在这里引入
 
 
@@ -55,9 +57,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(cors({
   // 允许前端来源
     origin: 'http://localhost:5173',
-  // 允许的HTTP请求头
-    methods: ['GET', 'POST','DELETE','PUT'], 
-    // 该中间件申明需要置于其他中间件和路由申明之前
+  // 允许的HTTP方法
+  methods: ['GET', 'POST','PUT','DELETE'], 
+  // 如后续对前端运行端口或使用的HTTP方法需要更新，请在这里进行修改,该中间件申明需要置于其他中间件和路由申明之前
+  // WYH在11月19日试图加入PUT和DELETE
 }));
 app.use(logger('dev'));
 app.use(express.json());
@@ -81,8 +84,10 @@ app.use('/userLogin', userLoginRoutes);
 app.use('/userCenter', userCenterRoutes);
 app.use('/weather', weatherRoutes);
 app.use('/account',accountRoutes);
+app.use('/contact', contactRoutes);
+app.use('/remember',rememberRoutes);
+app.use('/diet', dietRoutes);
 // 本项目中的路由在这里进行相关路径挂载
-
 
 
 
