@@ -2,33 +2,8 @@
 
 import { executeQuery } from '../config/dbconfig.js';
 import { v4 as uuidv4 } from 'uuid';
-// Register a new user
-// const register = async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
 
-//     // Check if the username already exists
-//     // const sql1 = 'SELECT username FROM userdata WHERE username = ?';
-//     // const result = await executeQuery(sql1, [username]);
-//     // if (result.length > 0) {
-//     //   return res.status(409).json({ message: 'Username already exists' });
-//     // }
 
-//     const sql = 'INSERT INTO userdata (username, password) VALUES (?, ?)';
-//     const resultInsert = await executeQuery(sql, [username, password]);
-
-//     res.send({
-//       message: 'Data inserted successfully',
-//       code: 200,
-//     });
-//   } catch (error) {
-//     console.error('Error inserting data:', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// };
-
-// Login a user
-// Route to insert a new record into the "login" table
 const register = async (req, res) => {
   try {
     const { username, password } = req.body;

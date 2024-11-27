@@ -1,4 +1,5 @@
 // 主服务器配置文件
+
 // ！！！！！！！！！！不要修改！！！！！！！！！！！！！
 // ！！！！！！！！！！不要修改！！！！！！！！！！！！！
 // ！！！！！！！！！！不要修改！！！！！！！！！！！！！
@@ -23,6 +24,7 @@ import { fileURLToPath } from 'url';
 // 此乃测试/模板路由声明
 import testRoutes from './routes/test.js';
 
+//import timetableRoutes from './routes/timetable.js';
 import userLoginRoutes from './routes/userLogin.js';
 import userCenterRoutes from './routes/userCenter.js';
 import weatherRoutes from './routes/weather.js';
@@ -53,9 +55,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(cors({
   // 允许前端来源
     origin: 'http://localhost:5173',
-  // 允许的HTTP方法
-    methods: ['GET', 'POST'], 
-    // 如后续对前端运行端口或使用的HTTP方法需要更新，请在这里进行修改,该中间件申明需要置于其他中间件和路由申明之前
+  // 允许的HTTP请求头
+    methods: ['GET', 'POST','DELETE','PUT'], 
+    // 该中间件申明需要置于其他中间件和路由申明之前
 }));
 app.use(logger('dev'));
 app.use(express.json());
@@ -74,6 +76,7 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 // 此乃测试路由挂载说明，进行接口测试时请使用 http://localhost:3000/test/test 进行测试
 app.use('/test', testRoutes);
 
+//app.use('/timetable', timetableRoutes);
 app.use('/userLogin', userLoginRoutes);
 app.use('/userCenter', userCenterRoutes);
 app.use('/weather', weatherRoutes);
@@ -91,18 +94,9 @@ app.use('/account',accountRoutes);
 // // error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
+    // console.log('Received login request:', req.body);
     res.status(500).render('error', { message: 'Internal Server Error' });
 });
-  // app.use(function(err, req, res, next) {
-  //   // set locals, only providing error in development
-  //   res.locals.message = err.message;
-  //   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  //   // render the error page
-  //   res.status(err.status || 500);
-  //   res.render('error');
-  // });
-
 
 
 // 本项目使用端口3000 非必要暂不修改
