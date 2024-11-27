@@ -10,9 +10,28 @@ function generateUniqueId() {
 // 获取备忘录列表
 const getMemos = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const query = 'SELECT * FROM reminders WHERE user_id = ? ORDER BY is_completed ASC, reminder_time ASC';
-    const memos = await executeQuery(query, [userId]);
+    const { user_id } = req.body;
+    //const query = 'SELECT * FROM reminders WHERE user_id = ? ORDER BY is_completed ASC, reminder_time ASC';
+    const query = 'SELECT * FROM reminders WHERE user_id = ? ';//ORDER BY is_completed ASC'; 
+    const memos = await executeQuery(query, [user_id]);
+
+    //测试能否通过
+    const resultsList = memos.length > 0
+    ? memos.map(record => ({
+        reminder_id: record.reminder_id,
+        user_id: record.user_id,  
+        reminder_content: record.reminder_content,      
+        reminder_time: record.reminder_time,
+        is_completed: record.is_completed,
+        edittime: record.editime
+    }))
+    : [];
+
+  // 返回记录数据
+  return res.status(200).json({
+    code: 200,
+    memos: resultsList,
+  });
 
     res.status(200).json({ memos });
   } catch (err) {
