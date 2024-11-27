@@ -5,7 +5,7 @@ import rememberController from '../controllers/rememberController.js';
 
 
 // 定义请求路由
-router.get('/getMemos', rememberController.getMemos);
+router.post('/getMemos', rememberController.getMemos);
 router.post('/saveMemo', rememberController.saveMemo);
 router.put('/updateMemo', rememberController.updateMemo);
 router.delete('/deleteMemo', rememberController.deleteMemo);
