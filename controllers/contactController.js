@@ -8,7 +8,7 @@ function generateUniqueId() {
 
 // 处理添加通讯录条目的请求
 const addContact = async (req, res) => {
-  const {userID, name, gender, phone, job, grp, remark, email, QQnum} = req.body;
+  const {user_id, name, gender, phone, job, grp, remark, email, QQnum} = req.body;
   // 简单的验证，确保必要字段不为空
   if (!name || !phone) {
     return res.status(400).json({
@@ -24,15 +24,42 @@ const addContact = async (req, res) => {
       INSERT INTO contacts (contact_id, user_id, name, gender, phone, job, grp, remark, email, QQnum)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
-    const values = [contact_id, userID, name, gender, phone, job, grp, remark, email, QQnum];
+    const values = [contact_id, user_id, name, gender, phone, job, grp, remark, email, QQnum];
     // 执行插入操作
     const result = await executeQuery(query, values);
-    const newContact = result.rows[0]; // 获取返回的新增联系人数据
-    return res.status(201).json({
-      message: 'Contact added successfully.',
-      data: newContact,
-      code: 201,
-    });
+
+
+    const resultsList = result.length > 0
+    ? result.map(record => ({
+        contact_id: record.contact_id, 
+        user_id: record.user_id,      
+        name: record.name,
+        gender: record.gender,
+        phone: record.phone, 
+        job: record.job,
+        grp : record.grp,
+        remark: record.remark,
+        email: record.email,
+        QQnum: record.QQnum
+    }))
+    : [];
+
+  // 返回记录数据
+  return res.status(200).json({
+    code: 200,
+    result: resultsList,
+  });
+
+
+
+
+
+    // const newContact = result.rows[0]; // 获取返回的新增联系人数据
+    // return res.status(201).json({
+    //   message: 'Contact added successfully.',
+    //   data: newContact,
+    //   code: 201,
+    // });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -53,24 +80,47 @@ const getContacts = async (req, res) => {
   }
   try {
     // 使用 SQL 查询语句根据姓名进行筛选
-    //const query = 'SELECT * FROM contacts WHERE name ILIKE \$1;';  // 使用 ILIKE 实现不区分大小写的模糊查询
     const query = 'SELECT * FROM contacts WHERE LOWER(name) LIKE LOWER(?);'
-
     const values = [`%${name}%`];  // 使用 % 来进行模糊查询
-
     const result = await executeQuery(query, values);
-
-    // if (result.rows.length === 0) {
+    // if (result.rows.length == 0) {
     //   return res.status(404).json({
     //     message: 'No contacts found with that name.',
     //     code: 404,
     //   });
     // }
-    return res.json({
-      message: 'Success!',
-      data: result.rows, // 返回查询到的联系人数据
-      code: 200,
-    });
+    // return res.json({
+    //   message: 'Success!',
+    //   data: result.rows, // 返回查询到的联系人数据
+    //   code: 200,
+    // });
+
+
+    // 如果没有找到记录，返回空列表
+    const resultsList = result.length > 0
+    ? result.map(record => ({
+        contact_id: record.contact_id,
+        user_id: record.user_id,      
+        name: record.name,
+        gender: record.gender,
+        phone: record.phone, 
+        job: record.job,
+        grp : record.grp,
+        remark: record.remark,
+        email: record.email,
+        QQnum: record.QQnum
+    }))
+    : [];
+
+  // 返回记录数据
+  return res.status(200).json({
+    code: 200,
+    result: resultsList,
+  });
+
+
+
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({
