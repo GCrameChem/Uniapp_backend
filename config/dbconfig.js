@@ -16,7 +16,6 @@ const centerDB = mysql.createPool({
 })
 
 //封装sql执行函数
-// 封装sql执行函数
 export const executeQuery = (sql, values) => {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
@@ -26,8 +25,7 @@ export const executeQuery = (sql, values) => {
       }
 
       connection.query(sql, values, (queryErr, results) => {
-        connection.release();
-
+        connection.release();  // 释放连接
         if (queryErr) {
           reject(queryErr);
         } else {

@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 26/11/2024 17:35:02
+ Date: 27/11/2024 16:07:13
 */
 
 SET NAMES utf8mb4;
@@ -93,7 +93,7 @@ CREATE TABLE `contacts`  (
   INDEX `user_id4`(`user_id` ASC) USING BTREE,
   INDEX `teacher_name`(`name` ASC) USING BTREE,
   CONSTRAINT `user_id4` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of contacts
@@ -170,7 +170,7 @@ CREATE TABLE `reminders`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `timetable`;
 CREATE TABLE `timetable`  (
-  `timetable_id` int NOT NULL AUTO_INCREMENT,
+  `timetable_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `classname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '课程名',
   `teacher_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '老师名',
@@ -179,17 +179,21 @@ CREATE TABLE `timetable`  (
   `end_week` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '结束周',
   `weekday` int NOT NULL COMMENT '周几',
   `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '上课地点',
+  `timetable_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '笔记',
+  `timetable_contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系方式',
   PRIMARY KEY (`timetable_id`) USING BTREE,
   INDEX `user_id5`(`user_id` ASC) USING BTREE,
   INDEX `teacher_name`(`teacher_name` ASC) USING BTREE,
   INDEX `course_name`(`classname` ASC) USING BTREE,
-  CONSTRAINT `teacher_name1` FOREIGN KEY (`teacher_name`) REFERENCES `contacts` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `user_id5` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of timetable
 -- ----------------------------
+INSERT INTO `timetable` VALUES ('22fe5dc9-5b0c-4512-87bc-1d3a623330a3', '43acd90c-05d6-4c1f-8acf-897179a1d956', '1', '1', '-1', '1', '12', -1, '1', '2', '1');
+INSERT INTO `timetable` VALUES ('6394d375-09cb-4b6c-af5d-ed8cf8159401', '43acd90c-05d6-4c1f-8acf-897179a1d956', '1', '1', '1', '1', '14', 1, '1', '1', '1');
+INSERT INTO `timetable` VALUES ('e547064c-fc56-4bc6-bcbb-5968a714685e', '43acd90c-05d6-4c1f-8acf-897179a1d956', '1', '1', '-1', '1', '12', -1, '1', '1', '1');
 
 -- ----------------------------
 -- Table structure for userdata
@@ -204,14 +208,16 @@ CREATE TABLE `userdata`  (
   `age` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '年龄',
   `school` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '学校',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '个人描述',
+  `timetable_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '笔记',
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of userdata
 -- ----------------------------
-INSERT INTO `userdata` VALUES ('43acd90c-05d6-4c1f-8acf-897179a1d956', 'gin', 'G', '1234', '未知', '999', 'SCU', '默认简介');
-INSERT INTO `userdata` VALUES ('7038d900-8773-4312-a8b4-1ff906d6783d', 'gin', '默认昵称', '1234', '未知', '未知', '未知', '默认简介');
-INSERT INTO `userdata` VALUES ('a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 'y', '123', 't', '女', '18', '四川大学', 'lalala');
+INSERT INTO `userdata` VALUES ('43acd90c-05d6-4c1f-8acf-897179a1d956', 'gin', 'G', '1234', '未知', '999', 'SCU', '默认简介', NULL);
+INSERT INTO `userdata` VALUES ('7038d900-8773-4312-a8b4-1ff906d6783d', 'gin', '默认昵称', '1234', '未知', '未知', '未知', '默认简介', NULL);
+INSERT INTO `userdata` VALUES ('a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 'y', '123', 't', '女', '18', '四川大学', 'lalala', NULL);
+INSERT INTO `userdata` VALUES ('a3ca0562-2e3a-438a-aaa7-2e7cea605acc', 'gin', '默认昵称', '1234', '未知', '未知', '未知', '默认简介', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

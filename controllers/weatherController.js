@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'; // 使用ESM的import语法
+import fetch from 'node-fetch';
 
 
 // 通过城市名获取城市经纬度

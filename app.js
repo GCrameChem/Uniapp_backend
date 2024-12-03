@@ -1,4 +1,5 @@
 // 主服务器配置文件
+
 // ！！！！！！！！！！不要修改！！！！！！！！！！！！！
 // ！！！！！！！！！！不要修改！！！！！！！！！！！！！
 // ！！！！！！！！！！不要修改！！！！！！！！！！！！！
@@ -23,15 +24,15 @@ import { fileURLToPath } from 'url';
 // 此乃测试/模板路由声明
 import testRoutes from './routes/test.js';
 
+import timetableRoutes from './routes/timetable.js';
 import userLoginRoutes from './routes/userLogin.js';
 import userCenterRoutes from './routes/userCenter.js';
 import weatherRoutes from './routes/weather.js';
 import accountRoutes from './routes/account.js'; 
 import contactRoutes from './routes/contact.js';
 import rememberRoutes from './routes/remember.js';
+import dietRoutes from './routes/diet.js';
 import notetakeRoutes from './routes/notetake.js';
-//import notetakeRoutes from './routes/notetake.js';
-//import VoiceToTextRoutes from './controllers/VoiceToTextController.js';
 // 本项目中其他路由在这里引入
 
 
@@ -79,15 +80,15 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 // 此乃测试路由挂载说明，进行接口测试时请使用 http://localhost:3000/test/test 进行测试
 app.use('/test', testRoutes);
 
+app.use('/timetable', timetableRoutes);
 app.use('/userLogin', userLoginRoutes);
 app.use('/userCenter', userCenterRoutes);
 app.use('/weather', weatherRoutes);
 app.use('/account',accountRoutes);
 app.use('/contact', contactRoutes);
 app.use('/remember',rememberRoutes);
+app.use('/diet', dietRoutes);
 app.use('/notetake', notetakeRoutes);
-//app.use('/notetake',notetakeRoutes);
-//app.use('/VoiceToText',VoiceToTextRoutes);
 // 本项目中的路由在这里进行相关路径挂载
 
 
@@ -100,18 +101,9 @@ app.use('/notetake', notetakeRoutes);
 // // error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
+    // console.log('Received login request:', req.body);
     res.status(500).render('error', { message: 'Internal Server Error' });
 });
-  // app.use(function(err, req, res, next) {
-  //   // set locals, only providing error in development
-  //   res.locals.message = err.message;
-  //   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  //   // render the error page
-  //   res.status(err.status || 500);
-  //   res.render('error');
-  // });
-
 
 
 // 本项目使用端口3000 非必要暂不修改
