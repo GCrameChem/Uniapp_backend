@@ -11,32 +11,11 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 26/11/2024 17:35:02
+ Date: 04/12/2024 02:09:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for account
--- ----------------------------
-DROP TABLE IF EXISTS `account`;
-CREATE TABLE `account`  (
-  `expense_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `expend` decimal(10, 2) NULL DEFAULT NULL COMMENT '支出',
-  `income` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收入',
-  `sort` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类别',
-  `date` datetime NULL DEFAULT NULL COMMENT '消费日期',
-  `remark` text CHARACTER SET tis620 COLLATE tis620_thai_ci NULL COMMENT '备注',
-  PRIMARY KEY (`expense_id`) USING BTREE,
-  INDEX `user_id2`(`user_id` ASC) USING BTREE,
-  CONSTRAINT `user_id2` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of account
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for accountdata
@@ -93,7 +72,7 @@ CREATE TABLE `contacts`  (
   INDEX `user_id4`(`user_id` ASC) USING BTREE,
   INDEX `teacher_name`(`name` ASC) USING BTREE,
   CONSTRAINT `user_id4` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of contacts
@@ -108,10 +87,10 @@ CREATE TABLE `diet`  (
   `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `sort` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '分类',
   `food_item` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '食物项',
+  `year` int NULL DEFAULT NULL,
+  `month` int NULL DEFAULT NULL,
   `date` date NULL DEFAULT NULL,
-  `reminder` text CHARACTER SET ujis COLLATE ujis_japanese_ci NULL COMMENT '相关提醒',
   `number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '已食用次数',
-  `dietplan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '相关计划',
   PRIMARY KEY (`diet_id`) USING BTREE,
   INDEX `user_id3`(`user_id` ASC) USING BTREE,
   CONSTRAINT `user_id3` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -120,8 +99,34 @@ CREATE TABLE `diet`  (
 -- ----------------------------
 -- Records of diet
 -- ----------------------------
-INSERT INTO `diet` VALUES ('diet-1732612580196csdcsrliu', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '饮品', '奶茶', '2024-11-26', NULL, '1', NULL);
-INSERT INTO `diet` VALUES ('diet-1732612633916qks2fq6mg', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '零食', '薯条', '2024-11-25', NULL, '2', NULL);
+INSERT INTO `diet` VALUES ('diet-1732612633916qks2fq6mg', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '零食', '薯条', 2024, 11, '2024-11-25', '2');
+INSERT INTO `diet` VALUES ('diet-1732697632572iuv1vp9w1', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '午餐', '火锅', 2024, 11, '2024-11-27', '1');
+INSERT INTO `diet` VALUES ('diet-1732697761008n3zg5vywm', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '水果', '苹果', 2024, 11, '2024-11-27', '2');
+INSERT INTO `diet` VALUES ('diet-1733248777898wb46k0ccs', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '外卖', '炸鸡', 2024, 12, '2024-12-03', '1');
+INSERT INTO `diet` VALUES ('diet-1733249178885fcic6p0y6', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '甜品', '蛋糕', 2024, 12, '2024-12-03', '2');
+
+-- ----------------------------
+-- Table structure for dietplan
+-- ----------------------------
+DROP TABLE IF EXISTS `dietplan`;
+CREATE TABLE `dietplan`  (
+  `plan_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `year` int NULL DEFAULT NULL,
+  `month` int NULL DEFAULT NULL,
+  `quantity` int NULL DEFAULT NULL,
+  `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `quantity_remained` int NULL DEFAULT NULL,
+  PRIMARY KEY (`plan_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of dietplan
+-- ----------------------------
+INSERT INTO `dietplan` VALUES ('plan-1732612633916qks2fq6mg', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 2024, 12, 4, '外卖', 3);
+INSERT INTO `dietplan` VALUES ('plan-1733240332489n791u54p8', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 2024, 12, 3, '甜品', 1);
+INSERT INTO `dietplan` VALUES ('plan-17332430450110sknrjh6r', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 2024, 11, 3, '甜品', 3);
+INSERT INTO `dietplan` VALUES ('plan-1733243358870qgnbnahs0', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 2024, 12, 2, '烧烤', 2);
 
 -- ----------------------------
 -- Table structure for note
@@ -159,7 +164,7 @@ CREATE TABLE `reminders`  (
   PRIMARY KEY (`reminder_id`) USING BTREE,
   INDEX `user_id1`(`user_id` ASC) USING BTREE,
   CONSTRAINT `user_id1` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of reminders
@@ -185,7 +190,7 @@ CREATE TABLE `timetable`  (
   INDEX `course_name`(`classname` ASC) USING BTREE,
   CONSTRAINT `teacher_name1` FOREIGN KEY (`teacher_name`) REFERENCES `contacts` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `user_id5` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of timetable
