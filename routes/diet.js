@@ -12,5 +12,12 @@ router.post('/deleteRecord', dietController.deleteRecord);
 
 router.post('/addRecord', dietController.addRecord);
 
+router.post('/getPlans', dietController.getPlans);
+
+router.post('/deletePlan', dietController.deletePlan);
+
+router.post('/addPlan', dietController.addPlan);
+
+router.post('/editPlan', dietController.editPlan);
 
 export default router;
