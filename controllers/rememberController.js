@@ -9,8 +9,10 @@ function generateUniqueId() {
 
 // 获取备忘录列表
 const getMemos = async (req, res) => {
+  //console.log('Request body:', req.body);  // 打印请求体内容
+  const { user_id } = req.body;
   try {
-    const { user_id } = req.body;
+    //const values = [user_id];
     //const query = 'SELECT * FROM reminders WHERE user_id = ? ORDER BY is_completed ASC, reminder_time ASC';
     const query = 'SELECT * FROM reminders WHERE user_id = ? ';//ORDER BY is_completed ASC'; 
     const memos = await executeQuery(query, [user_id]);
@@ -23,7 +25,7 @@ const getMemos = async (req, res) => {
         reminder_content: record.reminder_content,      
         reminder_time: record.reminder_time,
         is_completed: record.is_completed,
-        edittime: record.editime
+        editime: record.editime
     }))
     : [];
 
@@ -33,16 +35,17 @@ const getMemos = async (req, res) => {
     memos: resultsList,
   });
 
-    res.status(200).json({ memos });
+    //res.status(200).json({ memos });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: '获取备忘录失败', error: err.message });
   }
 };
 
 // 保存备忘录
 const saveMemo = async (req, res) => {
+  const { user_id, reminder_content, reminder_time, is_completed, editime } = req.body;
   try {
-    const { user_id, reminder_content, reminder_time, is_completed, editime } = req.body;
     const reminderId = generateUniqueId(); // 生成唯一 ID
     const query = 'INSERT INTO reminders (reminder_id, user_id, reminder_content, reminder_time, is_completed, editime) VALUES (?, ?, ?, ?, ?, ?)';
     await executeQuery(query, [reminderId, user_id, reminder_content, reminder_time, is_completed, editime]);

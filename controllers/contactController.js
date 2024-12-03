@@ -27,8 +27,6 @@ const addContact = async (req, res) => {
     const values = [contact_id, user_id, name, gender, phone, job, grp, remark, email, QQnum];
     // 执行插入操作
     const result = await executeQuery(query, values);
-
-
     const resultsList = result.length > 0
     ? result.map(record => ({
         contact_id: record.contact_id, 
@@ -49,11 +47,6 @@ const addContact = async (req, res) => {
     code: 200,
     result: resultsList,
   });
-
-
-
-
-
     // const newContact = result.rows[0]; // 获取返回的新增联系人数据
     // return res.status(201).json({
     //   message: 'Contact added successfully.',
@@ -68,6 +61,51 @@ const addContact = async (req, res) => {
     });
   }
 };
+
+
+const getAllContacts = async (req, res) => {
+  try {
+    const { user_id } = req.body;  // 从查询参数中获取姓名
+    if (!user_id) {
+      return res.status(400).json({
+        message: '需要当前登录用户的user_id',
+        code: 400,
+      });
+    }
+    // 使用 SQL 查询语句根据姓名进行筛选
+    const query = 'SELECT * FROM contacts WHERE user_id = ? ';
+    const result = await executeQuery(query, [user_id]);
+    // 如果没有找到记录，返回空列表
+    const resultsList = result.length > 0
+    ? result.map(record => ({
+        contact_id: record.contact_id,
+        //user_id: record.user_id,      
+        name: record.name,
+        gender: record.gender,
+        phone: record.phone, 
+        job: record.job,
+        grp : record.grp,
+        remark: record.remark,
+        email: record.email,
+        QQnum: record.QQnum
+    }))
+    : [];
+  // 返回记录数据
+  return res.status(200).json({
+    code: 200,
+    result: resultsList,
+  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: 'Error fetching contacts.',
+      code: 500,
+    });
+  }
+};
+
+
+
 
 //处理获取所有通讯录条目的请求
 const getContacts = async (req, res) => {
@@ -219,7 +257,9 @@ const deleteContact = async (req, res) => {
 // 导出控制器方法
 export default {
   addContact,
+  getAllContacts,
   getContacts,
   editContact,
   deleteContact,
+
 };
