@@ -126,19 +126,19 @@ return res.status(200).json({
   }
 };
 
-//用笔记名称来搜索目标笔记
+//用笔记id来搜索目标笔记
 const searchNoteByName = async (req, res) => {
-  const { note_title } = req.body;  // 从查询参数获取笔记名称
-  if (!note_title) {
-    return res.status(400).json({ message: '笔记名称是必需的' });
+  const { note_id } = req.body;  // 从查询参数获取笔记名称
+  if (!note_id) {
+    return res.status(400).json({ message: '笔记id是必需的' });
   }
   const query = `
     SELECT * FROM note
-    WHERE note_title LIKE ?
+    WHERE note_id = ?
   `;
   try {
     // 执行数据库查询，使用 LIKE 来模糊匹配笔记名称
-    const result = await executeQuery(query, [`%${note_title}%`]);
+    const result = await executeQuery(query, [note_id]);
     if (result.length === 0) {
       return res.status(404).json({ message: '未找到相关笔记' });
     }
