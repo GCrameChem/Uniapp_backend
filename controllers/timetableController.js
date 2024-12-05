@@ -55,7 +55,7 @@ const getTimetable = async (req, res) => {
         const { userId } = req.body;
         console.log('Received request:', req.body);
         const sql = `SELECT * FROM timetable WHERE user_id = ?`;
-        const [records] = await executeQuery(sql, [userId]);
+        const records = await executeQuery(sql, [userId]);
 
         res.status(200).json({ code: 200, classData: records });
     } catch (err) {
