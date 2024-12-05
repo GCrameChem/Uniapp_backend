@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : SmartStudyAssistant
+ Source Server         : TestOne
  Source Server Type    : MySQL
  Source Server Version : 80040 (8.0.40)
  Source Host           : localhost:3306
- Source Schema         : smartstudyassistant
+ Source Schema         : rg2
 
  Target Server Type    : MySQL
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 04/12/2024 02:09:42
+ Date: 05/12/2024 18:29:32
 */
 
 SET NAMES utf8mb4;
@@ -58,13 +58,13 @@ INSERT INTO `accountdata` VALUES ('rec_1732554213337_755715', 'a2e1ca9e-c3a7-422
 -- ----------------------------
 DROP TABLE IF EXISTS `contacts`;
 CREATE TABLE `contacts`  (
-  `contact_id` int NOT NULL AUTO_INCREMENT,
+  `contact_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名',
   `gender` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '性别',
   `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话',
   `job` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '职位',
-  `group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '分组',
+  `grp` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '分组',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮件',
   `QQnum` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'qq',
@@ -118,7 +118,7 @@ CREATE TABLE `dietplan`  (
   `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `quantity_remained` int NULL DEFAULT NULL,
   PRIMARY KEY (`plan_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dietplan
@@ -133,16 +133,13 @@ INSERT INTO `dietplan` VALUES ('plan-1733243358870qgnbnahs0', 'a2e1ca9e-c3a7-422
 -- ----------------------------
 DROP TABLE IF EXISTS `note`;
 CREATE TABLE `note`  (
-  `note_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '笔记名/标题',
-  `course_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '对应课程名',
   `note_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标题',
   `note_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '内容',
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `edit_time` datetime NULL DEFAULT NULL COMMENT '上次编辑时间',
-  PRIMARY KEY (`note_name`) USING BTREE,
+  `note_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`note_id`) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE,
-  INDEX `class_name`(`course_name` ASC) USING BTREE,
-  CONSTRAINT `class_name` FOREIGN KEY (`course_name`) REFERENCES `timetable` (`classname`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
@@ -155,13 +152,13 @@ CREATE TABLE `note`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `reminders`;
 CREATE TABLE `reminders`  (
-  `reminder_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `reminder_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `reminder_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '提醒内容',
   `reminder_time` datetime NULL DEFAULT NULL COMMENT '提醒时间',
   `is_completed` tinyint NULL DEFAULT NULL COMMENT '是否已经完成',
   `editime` datetime NULL DEFAULT NULL COMMENT '编辑时间（暂留',
-  PRIMARY KEY (`reminder_id`) USING BTREE,
+  PRIMARY KEY (`reminder_id`, `user_id`) USING BTREE,
   INDEX `user_id1`(`user_id` ASC) USING BTREE,
   CONSTRAINT `user_id1` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;

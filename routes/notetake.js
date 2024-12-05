@@ -6,10 +6,13 @@ import noteController from '../controllers/notetakeController.js';
 
 
 router.post('/saveTextNote', noteController.saveTextNote);
-
 // 处理语音笔记上传和转文字
 //router.post('/saveVoiceNote', multer({ dest: './uploads/' }).single('audio'), noteController.saveVoiceNote);
 router.post('/searchNoteByName', noteController.searchNoteByName);
-router.post('/editNoteContent',noteController.editNoteContent)
+router.put('/editNoteContent',noteController.editNoteContent);
+router.post('/getAllNotes',noteController.getAllNotes);
+router.delete('/deleteRecord',noteController.deleteRecord)
+
+
 
 export default router;
