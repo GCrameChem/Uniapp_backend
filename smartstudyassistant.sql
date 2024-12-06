@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : TestOne
+ Source Server         : SmartStudyAssistant
  Source Server Type    : MySQL
  Source Server Version : 80040 (8.0.40)
  Source Host           : localhost:3306
- Source Schema         : rg2
+ Source Schema         : smartstudyassistant
 
  Target Server Type    : MySQL
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 05/12/2024 18:29:32
+ Date: 07/12/2024 01:07:56
 */
 
 SET NAMES utf8mb4;
@@ -52,6 +52,23 @@ INSERT INTO `accountdata` VALUES ('rec_1731481928917_827756', '43acd90c-05d6-4c1
 INSERT INTO `accountdata` VALUES ('rec_1732548313896_320314', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '2024-11-24', 'expense', '饮食', NULL, 7.00, '奶茶');
 INSERT INTO `accountdata` VALUES ('rec_1732554079392_371605', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '2024-11-25', 'income', NULL, '退款', 85.00, '购物退款');
 INSERT INTO `accountdata` VALUES ('rec_1732554213337_755715', 'a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', '2024-11-26', 'expense', '饮食', NULL, 15.00, '午餐');
+
+-- ----------------------------
+-- Table structure for code
+-- ----------------------------
+DROP TABLE IF EXISTS `code`;
+CREATE TABLE `code`  (
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `veri_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of code
+-- ----------------------------
+INSERT INTO `code` VALUES ('2058406739@qq.com', '454668');
+INSERT INTO `code` VALUES ('2058406739@qq.com', '421465');
+INSERT INTO `code` VALUES ('2058406739@qq.com', '742101');
+INSERT INTO `code` VALUES ('2058406739@qq.com', '564169');
 
 -- ----------------------------
 -- Table structure for contacts
@@ -200,8 +217,9 @@ DROP TABLE IF EXISTS `userdata`;
 CREATE TABLE `userdata`  (
   `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '唯一区别不同用户的方式',
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名(注册与登录时使用',
-  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '昵称(用户界面可显示',
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
   `gender` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '性别\n(仅限男/女',
   `age` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '年龄',
   `school` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '学校',
@@ -212,8 +230,9 @@ CREATE TABLE `userdata`  (
 -- ----------------------------
 -- Records of userdata
 -- ----------------------------
-INSERT INTO `userdata` VALUES ('43acd90c-05d6-4c1f-8acf-897179a1d956', 'gin', 'G', '1234', '未知', '999', 'SCU', '默认简介');
-INSERT INTO `userdata` VALUES ('7038d900-8773-4312-a8b4-1ff906d6783d', 'gin', '默认昵称', '1234', '未知', '未知', '未知', '默认简介');
-INSERT INTO `userdata` VALUES ('a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 'y', '123', 't', '女', '18', '四川大学', 'lalala');
+INSERT INTO `userdata` VALUES ('43acd90c-05d6-4c1f-8acf-897179a1d956', 'gin', NULL, '1234', 'G', '未知', '999', 'SCU', '默认简介');
+INSERT INTO `userdata` VALUES ('7038d900-8773-4312-a8b4-1ff906d6783d', 'gin', NULL, '1234', '默认昵称', '未知', '未知', '未知', '默认简介');
+INSERT INTO `userdata` VALUES ('8b350830-4a84-43f5-8797-cc75b65566c9', 'tqq', '2058406739@qq.com', '1207', '默认昵称', '未知', '未知', '未知', '默认简介');
+INSERT INTO `userdata` VALUES ('a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 'y', NULL, 't', '123', '女', '18', '四川大学', 'lalala');
 
 SET FOREIGN_KEY_CHECKS = 1;
