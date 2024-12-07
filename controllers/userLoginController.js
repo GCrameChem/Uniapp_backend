@@ -3,11 +3,101 @@
 import { executeQuery } from '../config/dbconfig.js';
 import { v4 as uuidv4 } from 'uuid';
 
+// 发送邮箱验证码所需依赖引入
+// 使用 ES Module 语法导入模块
+import nodemailer from 'nodemailer';
+import smtpTransport from 'nodemailer-smtp-transport';
+// import assert from 'http-assert';
+
+// 创建SMTP连接
+const transport = nodemailer.createTransport(smtpTransport({
+  host: 'smtp.163.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'tqq25172431@163.com', // 发件邮箱
+    pass: 'MKdheYM746y4yfv8'  // 发件邮箱的SMTP授权码
+  }
+}));
+
+// 生成6位验证码
+const randomFns = () => {
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    code += parseInt(Math.random() * 10);  // 生成随机数
+  }
+  return code;
+};
+
+// 邮箱格式验证正则
+const regEmail = /^([a-zA-Z0-9]+[||.]?)[a-zA-Z0-9]+@([a-zA-Z0-9]+[||.]?)*[a-zA-Z0-9]+.[a-zA-Z]{2,3}$/;
+
+const getCaptcha = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    console.log('Received getCaptcha request:', req.body);
+
+    // 验证邮箱格式
+    if (!regEmail.test(email)) {
+      return res.status(422).json({ message: '请输入正确的邮箱格式！' });
+    }
+
+    // 检查邮箱是否已注册
+    const emailCheckSql = 'SELECT email FROM userdata WHERE email = ?';
+    const emailResult = await executeQuery(emailCheckSql, [email]);
+
+    if (emailResult.length > 0) {
+      return res.status(409).json({ message: '邮箱已被注册' });
+    }
+
+    // 发送验证码
+    const code = randomFns();
+    transport.sendMail({
+      from: 'tqq25172431@163.com',
+      to: email,
+      subject: '验证你的电子邮件',
+      html: `<p>你好！</p>
+             <p>您正在注册智慧伴学助手账号</p>
+             <p>你的验证码是：<strong style="color: #ff4e2a;">${code}</strong></p>
+             <p>该验证码5分钟内有效</p>`
+    }, async (error, data) => {
+      if (error) {
+        return res.status(500).json({ message: '发送验证码失败！' });
+      }
+
+      // 将验证码存入数据库
+      const insertCodeSql = 'INSERT INTO code (email, veri_code) VALUES (?, ?)';
+      await executeQuery(insertCodeSql, [email, code]);
+
+      // 5分钟后删除验证码
+      setTimeout(async () => {
+        await executeQuery(deleteCodeSql, [email]);
+      }, 5 * 60 * 1000);
+
+      res.status(200).json({
+        message: '验证码发送成功',
+        code: 200
+      });
+    });
+  } catch (error) {
+    console.error('Error during getCaptcha:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 const register = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    console.log('Received login request:', req.body);
+    const { username, email, password, emailCode } = req.body;
+    console.log('Received register request:', req.body);
+
+    // 判断验证码是否正确
+    const checkCodeSql = 'SELECT * FROM code WHERE email =? AND veri_code =?';
+    const result = await executeQuery(checkCodeSql, [email, emailCode]);
+
+    if(result.length == 0){
+      return res.status(403).json({ message: '验证码不正确' });
+    }
 
     // 分配userId，使用唯一标识符库
     const userId = uuidv4();
@@ -16,23 +106,11 @@ const register = async (req, res) => {
     const age = '未知';
     const school = '未知';
     const desc = '默认简介';
-    // 改进:加一个判断用户名是否已经存在的逻辑，不能重复申请
-    // 改进：区分大小写（这个小bug也可能是数据库的问题
-    // const sql1 = 'SELECT username FROM userdata WHERE username = ?';
-    // const result = await executeQuery(sql1, [username]);
-    // if (result.length > 0) {
-    //   return res.status(409).json({ message: 'Username already exists' });
-    // }
 
-    // const sql = 'INSERT INTO userdata (username, password) VALUES (?, ?)';
-    // const result = await executeQuery(sql, [username, password]);
+    const sql = 'INSERT INTO userdata (username, user_id, email, password, nickname, gender, age, school, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    const sql = 'INSERT INTO userdata (username, user_id, password, nickname, gender, age, school, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    // 改进：为每个不同的用户自动分配id
-    // 改进：哈希加密至少三次，并保证数据库中存储的是加密后的密码
-
-    // 传递正确的值
-    const result = await executeQuery(sql, [username, userId, password, nickName, gender, age, school, desc]);
+    // 存储用户信息
+    await executeQuery(sql, [username, userId, email, password, nickName, gender, age, school, desc]);
 
     res.send({
       message: 'Data inserted successfully',
@@ -50,12 +128,12 @@ const register = async (req, res) => {
 
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     console.log('Received login request:', req.body);
     try {
-        // 查询数据库，检查是否存在该用户名
-        const sql = 'SELECT password, user_id, nickname, gender, age, school, description FROM userdata WHERE username = ?';
-        const result = await executeQuery(sql, [username]);
+        // 查询数据库，检查是否存在该用户
+        const sql = 'SELECT password, user_id, nickname, gender, age, school, description FROM userdata WHERE username = ? AND email = ?';
+        const result = await executeQuery(sql, [username, email]);
 
         if (result.length > 0) {
             const dbPassword = result[0].password;
@@ -116,6 +194,7 @@ const getAllUsers = async (req, res) => {
 };
 
 export default { 
+  getCaptcha,
   register,
   login,
   getAllUsers,
