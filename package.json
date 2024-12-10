@@ -90,6 +90,8 @@
     "mysql": "^2.18.1",
     "negotiator": "^0.6.3",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.16",
+    "nodemailer-smtp-transport": "^2.7.4",
     "object-assign": "^4.1.1",
     "object-inspect": "^1.13.2",
     "on-finished": "^2.3.0",
@@ -140,5 +142,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "```\r uniapp_back\r ├─ .idea\r │  ├─ ApifoxUploaderProjectSetting.xml\r │  ├─ misc.xml\r │  ├─ modules.xml\r │  ├─ uniapp_back.iml\r │  ├─ vcs.xml\r │  └─ workspace.xml\r ├─ app.js\r ├─ bin\r │  └─ www\r ├─ config\r │  └─ dbconfig.js\r ├─ controllers\r │  ├─ accountController.js\r │  ├─ testController.js\r │  ├─ userCenterController.js\r │  ├─ userLoginController.js\r │  └─ weatherController.js\r ├─ Function\r │  └─ utilityFunctions.js\r ├─ package-lock.json\r ├─ package.json\r ├─ public\r │  ├─ images\r │  ├─ javascripts\r │  └─ stylesheets\r │     └─ style.css\r ├─ README.md\r ├─ routes\r │  ├─ account.js\r │  ├─ note.js\r │  ├─ test.js\r │  ├─ userCenter.js\r │  ├─ userLogin.js\r │  └─ weather.js\r ├─ smartstudyassistant.sql\r └─ views\r    ├─ error.ejs\r    ├─ error.jade\r    ├─ index.jade\r    └─ layout.jade",
+  "devDependencies": {}
 }

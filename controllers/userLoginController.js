@@ -70,10 +70,10 @@ const getCaptcha = async (req, res) => {
       const insertCodeSql = 'INSERT INTO code (email, veri_code) VALUES (?, ?)';
       await executeQuery(insertCodeSql, [email, code]);
 
-      // 5分钟后删除验证码
-      setTimeout(async () => {
-        await executeQuery(deleteCodeSql, [email]);
-      }, 5 * 60 * 1000);
+      // // 5分钟后删除验证码
+      // setTimeout(async () => {
+      //   await executeQuery(deleteCodeSql, [email]);
+      // }, 5 * 60 * 1000);
 
       res.status(200).json({
         message: '验证码发送成功',
