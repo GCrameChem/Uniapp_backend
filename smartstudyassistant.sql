@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 07/12/2024 01:07:56
+ Date: 10/12/2024 18:10:42
 */
 
 SET NAMES utf8mb4;
@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS `code`;
 CREATE TABLE `code`  (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `veri_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of code
@@ -69,6 +69,7 @@ INSERT INTO `code` VALUES ('2058406739@qq.com', '454668');
 INSERT INTO `code` VALUES ('2058406739@qq.com', '421465');
 INSERT INTO `code` VALUES ('2058406739@qq.com', '742101');
 INSERT INTO `code` VALUES ('2058406739@qq.com', '564169');
+INSERT INTO `code` VALUES ('wangyuhan030913@163.com', '909582');
 
 -- ----------------------------
 -- Table structure for contacts
@@ -189,7 +190,7 @@ CREATE TABLE `reminders`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `timetable`;
 CREATE TABLE `timetable`  (
-  `timetable_id` int NOT NULL AUTO_INCREMENT,
+  `timetable_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `classname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '课程名',
   `teacher_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '老师名',
@@ -198,11 +199,12 @@ CREATE TABLE `timetable`  (
   `end_week` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '结束周',
   `weekday` int NOT NULL COMMENT '周几',
   `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '上课地点',
+  `timetable_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '笔记',
+  `timetable_contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'time',
   PRIMARY KEY (`timetable_id`) USING BTREE,
   INDEX `user_id5`(`user_id` ASC) USING BTREE,
   INDEX `teacher_name`(`teacher_name` ASC) USING BTREE,
   INDEX `course_name`(`classname` ASC) USING BTREE,
-  CONSTRAINT `teacher_name1` FOREIGN KEY (`teacher_name`) REFERENCES `contacts` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `user_id5` FOREIGN KEY (`user_id`) REFERENCES `userdata` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
@@ -231,6 +233,7 @@ CREATE TABLE `userdata`  (
 -- Records of userdata
 -- ----------------------------
 INSERT INTO `userdata` VALUES ('43acd90c-05d6-4c1f-8acf-897179a1d956', 'gin', NULL, '1234', 'G', '未知', '999', 'SCU', '默认简介');
+INSERT INTO `userdata` VALUES ('47d1be6c-b00d-4eee-9043-36fdf2a36c5d', 'gin', 'wangyuhan030913@163.com', '123456', '默认昵称', '未知', '未知', '未知', '默认简介');
 INSERT INTO `userdata` VALUES ('7038d900-8773-4312-a8b4-1ff906d6783d', 'gin', NULL, '1234', '默认昵称', '未知', '未知', '未知', '默认简介');
 INSERT INTO `userdata` VALUES ('8b350830-4a84-43f5-8797-cc75b65566c9', 'tqq', '2058406739@qq.com', '1207', '默认昵称', '未知', '未知', '未知', '默认简介');
 INSERT INTO `userdata` VALUES ('a2e1ca9e-c3a7-422a-b00b-e89ef30e713e', 'y', NULL, 't', '123', '女', '18', '四川大学', 'lalala');
